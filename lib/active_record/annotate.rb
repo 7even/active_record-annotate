@@ -1,3 +1,4 @@
+require 'active_record/annotate/dumper'
 require 'active_record/annotate/version'
 
 module ActiveRecord
