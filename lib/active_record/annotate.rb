@@ -2,6 +2,6 @@ require 'active_record/annotate/version'
 
 module ActiveRecord
   module Annotate
-    # Your code goes here...
+    require 'active_record/annotate/railtie' if defined?(Rails)
   end
 end
