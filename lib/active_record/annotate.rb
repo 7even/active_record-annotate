@@ -34,7 +34,7 @@ module ActiveRecord
         
         temp_path = "#{path}.annotated"
         File.open(temp_path, 'w') do |temp_file|
-          temp_file.puts(annotation)
+          temp_file.write(annotation)
           temp_file.write(file_contents)
         end
         
