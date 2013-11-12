@@ -1,24 +1,46 @@
 # ActiveRecord::Annotate
 
-TODO: Write a gem description
+`ActiveRecord::Annotate` is a simple `ActiveRecord` plugin for annotating your rails models. It is based on `ActiveRecord::SchemaDumper` so the annotation format is very close to what you see in `db/schema.rb`.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Trivial.
 
-    gem 'active_record-annotate'
+``` ruby
+# Gemfile
+gem 'active_record-annotate'
+```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install active_record-annotate
+``` sh
+$ bundle
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Gem adds a simple `db:annotate` rake task - it just writes the annotation to the top of each model file in a comment block. Magic encoding comment is preserved.
+
+This is what it looks like:
+
+``` ruby
+# create_table :documents, force: true do |t|
+#   t.string   :title
+#   t.text     :content
+#   t.integer  :category_ids, array: true
+#   t.datetime :created_at
+#   t.datetime :updated_at
+# end
+#
+# add_index :documents, [:category_ids], name: :index_documents_on_category_ids, using: :gin
+
+class Document < ActiveRecord::Base
+# ...
+```
+
+## Roadmap
+
+* Cover everything with tests
+* Write YARD docs
+* Add some means to configure the annotation process (annotation format, a place to put it)
 
 ## Contributing
 
