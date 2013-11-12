@@ -8,7 +8,9 @@ Trivial.
 
 ``` ruby
 # Gemfile
-gem 'active_record-annotate'
+group :development do
+  gem 'active_record-annotate'
+end
 ```
 
 ``` sh
