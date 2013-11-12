@@ -41,6 +41,7 @@ class Document < ActiveRecord::Base
 * Cover everything with tests
 * Write YARD docs
 * Add some means to configure the annotation process (annotation format, a place to put it)
+* Try to add auto-annotation after `db:migrate`
 
 ## Contributing
 
