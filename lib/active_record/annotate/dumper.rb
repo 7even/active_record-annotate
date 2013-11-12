@@ -22,7 +22,7 @@ module ActiveRecord
               # replacing strings with symbols
               line.gsub!(/"(\w+)"/, ':\1')
             end
-          end.join("\n") + "\n\n"
+          end
         end
       end
     end
