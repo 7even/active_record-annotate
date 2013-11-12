@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = ActiveRecord::Annotate::VERSION
   spec.authors       = ['Vsevolod Romashov']
   spec.email         = ['7@7vn.ru']
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ''
+  spec.summary       = %q{ActiveRecord models annotator based on rails' schema dumper}
+  spec.description   = %q{Adds a rake task which prepends each model file with an excerpt about the corresponding table from db/schema.rb}
+  spec.homepage      = 'https://github.com/7even/active_record-annotate'
   spec.license       = 'MIT'
   
   spec.files         = `git ls-files`.split($/)
