@@ -1,4 +1,5 @@
 require 'active_record/annotate/dumper'
+require 'active_record/annotate/writer'
 require 'active_record/annotate/version'
 require 'active_record/annotate/railtie'
 
@@ -8,7 +9,7 @@ module ActiveRecord
       def annotate
         models.each do |table_name, file_path|
           annotation = Dumper.dump(table_name)
-          write_annotation(annotation, file_path)
+          Writer.write(annotation, file_path)
         end
       end
       
@@ -27,19 +28,6 @@ module ActiveRecord
           # collect only AR::Base descendants
           models[klass.table_name] = path if klass < ActiveRecord::Base
         end
-      end
-      
-      def write_annotation(annotation, path)
-        file_contents = File.read(path)
-        
-        temp_path = "#{path}.annotated"
-        File.open(temp_path, 'w') do |temp_file|
-          temp_file.write(annotation)
-          temp_file.write(file_contents)
-        end
-        
-        File.delete(path)
-        File.rename(temp_path, path)
       end
     end
   end
