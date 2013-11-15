@@ -7,9 +7,12 @@ module ActiveRecord
   module Annotate
     class << self
       def annotate
-        models.each do |table_name, file_path|
+        models.each do |table_name, file_paths|
           annotation = Dumper.dump(table_name)
-          Writer.write(annotation, file_path)
+          
+          file_paths.each do |path|
+            Writer.write(annotation, path)
+          end
         end
       end
       
@@ -17,7 +20,11 @@ module ActiveRecord
         models_dir = Rails.root.join('app/models')
         files_mask = models_dir.join('**', '*.rb')
         
-        Dir.glob(files_mask).each_with_object(Hash.new) do |path, models|
+        hash_with_arrays = Hash.new do |hash, key|
+          hash[key] = []
+        end
+        
+        Dir.glob(files_mask).each_with_object(hash_with_arrays) do |path, models|
           # .../app/models/car/hatchback.rb -> car/hatchback
           short_path = path.sub(models_dir.to_s + '/', '').sub(/\.rb$/, '')
           # skip any app/models/concerns files
@@ -26,7 +33,7 @@ module ActiveRecord
           # car/hatchback -> Car::Hatchback
           klass = short_path.camelize.constantize
           # collect only AR::Base descendants
-          models[klass.table_name] = path if klass < ActiveRecord::Base
+          models[klass.table_name] << path if klass < ActiveRecord::Base
         end
       end
     end
