@@ -7,6 +7,7 @@ module ActiveRecord
   module Annotate
     class << self
       def annotate
+        puts 'Processed model files:'
         models.each do |table_name, file_paths|
           annotation = Dumper.dump(table_name)
           
