@@ -1,4 +1,4 @@
-# ActiveRecord::Annotate
+# ActiveRecord::Annotate [![Build Status](https://travis-ci.org/7even/active_record-annotate.png)](https://travis-ci.org/7even/active_record-annotate)
 
 ActiveRecord::Annotate is a simple ActiveRecord plugin for annotating your rails models. It is based on `ActiveRecord::SchemaDumper` (a core ActiveRecord class responsible for creating `db/schema.rb`) so the annotation format is very close to what you write in your migrations.
 
