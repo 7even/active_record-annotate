@@ -1,5 +1,6 @@
 require 'active_record/annotate/dumper'
 require 'active_record/annotate/writer'
+require 'active_record/annotate/file'
 require 'active_record/annotate/version'
 require 'active_record/annotate/railtie'
 
