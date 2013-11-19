@@ -7,18 +7,26 @@ module ActiveRecord
   module Annotate
     class << self
       def annotate
-        puts 'Processed model files:'
-        models.each do |table_name, file_paths|
+        processed_models = []
+        
+        models.each do |table_name, file_paths_and_classes|
           annotation = Dumper.dump(table_name)
           
-          file_paths.each do |path|
+          file_paths_and_classes.each do |path, klass|
             file = File.new(path)
             file.annotate_with(annotation)
             
             if file.changed?
               file.write
-              puts "* #{relative_path_for(path)}"
+              processed_models << "#{klass} (#{relative_path_for(path)})"
             end
+          end
+        end
+        
+        unless processed_models.empty?
+          puts 'Annotated models:'
+          processed_models.each do |model|
+            puts "  * #{model}"
           end
         end
       end
@@ -37,7 +45,7 @@ module ActiveRecord
           klass = class_name_for(short_path)
           next unless klass < ActiveRecord::Base # collect only AR::Base descendants
           
-          models[klass.table_name] << path
+          models[klass.table_name] << [path, klass]
         end
       end
       
