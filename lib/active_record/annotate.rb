@@ -1,5 +1,4 @@
 require 'active_record/annotate/dumper'
-require 'active_record/annotate/writer'
 require 'active_record/annotate/file'
 require 'active_record/annotate/version'
 require 'active_record/annotate/railtie'
@@ -13,7 +12,13 @@ module ActiveRecord
           annotation = Dumper.dump(table_name)
           
           file_paths.each do |path|
-            Writer.write(annotation, path)
+            file = File.new(path)
+            file.annotate_with(annotation)
+            
+            if file.changed?
+              file.write
+              puts "* #{relative_path_for(path)}"
+            end
           end
         end
       end
@@ -30,8 +35,9 @@ module ActiveRecord
           next if short_path.starts_with?('concerns') # skip any app/models/concerns files
           
           klass = class_name_for(short_path)
-          # collect only AR::Base descendants
-          models[klass.table_name] << path if klass < ActiveRecord::Base
+          next unless klass < ActiveRecord::Base # collect only AR::Base descendants
+          
+          models[klass.table_name] << path
         end
       end
       
@@ -43,6 +49,10 @@ module ActiveRecord
       # car/hatchback -> Car::Hatchback
       def class_name_for(short_path)
         short_path.camelize.constantize
+      end
+      
+      def relative_path_for(full_path)
+        full_path.sub(/^#{Rails.root}\//, '')
       end
       
     private
