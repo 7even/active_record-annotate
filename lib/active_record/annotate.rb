@@ -19,7 +19,6 @@ module ActiveRecord
       end
       
       def models
-        models_dir = Rails.root.join('app/models')
         files_mask = models_dir.join('**', '*.rb')
         
         hash_with_arrays = Hash.new do |hash, key|
@@ -27,16 +26,28 @@ module ActiveRecord
         end
         
         Dir.glob(files_mask).each_with_object(hash_with_arrays) do |path, models|
-          # .../app/models/car/hatchback.rb -> car/hatchback
-          short_path = path.sub(models_dir.to_s + '/', '').sub(/\.rb$/, '')
-          # skip any app/models/concerns files
-          next if short_path.starts_with?('concerns')
+          short_path = short_path_for(path)
+          next if short_path.starts_with?('concerns') # skip any app/models/concerns files
           
-          # car/hatchback -> Car::Hatchback
-          klass = short_path.camelize.constantize
+          klass = class_name_for(short_path)
           # collect only AR::Base descendants
           models[klass.table_name] << path if klass < ActiveRecord::Base
         end
+      end
+      
+      # .../app/models/car/hatchback.rb -> car/hatchback
+      def short_path_for(full_path)
+        full_path.sub(models_dir.to_s + '/', '').sub(/\.rb$/, '')
+      end
+      
+      # car/hatchback -> Car::Hatchback
+      def class_name_for(short_path)
+        short_path.camelize.constantize
+      end
+      
+    private
+      def models_dir
+        Rails.root.join('app/models')
       end
     end
   end
