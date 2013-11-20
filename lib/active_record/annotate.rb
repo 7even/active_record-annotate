@@ -18,7 +18,7 @@ module ActiveRecord
             
             if file.changed?
               file.write
-              processed_models << "#{klass} (#{relative_path_for(path)})"
+              processed_models << "#{klass} (#{file.relative_path})"
             end
           end
         end
@@ -57,10 +57,6 @@ module ActiveRecord
       # car/hatchback -> Car::Hatchback
       def class_name_for(short_path)
         short_path.camelize.constantize
-      end
-      
-      def relative_path_for(full_path)
-        full_path.sub(/^#{Rails.root}\//, '')
       end
       
     private

@@ -41,6 +41,10 @@ module ActiveRecord
       def changed?
         @lines.join(?\n) != @content
       end
+      
+      def relative_path
+        path.sub(/^#{Rails.root}\//, '')
+      end
     end
   end
 end

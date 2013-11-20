@@ -97,4 +97,15 @@ end
       expect(new_file_contents).to eq(expected_result)
     end
   end
+  
+  describe "#relative_path" do
+    before(:each) do
+      Rails.stub(:root).and_return('root')
+      file.stub(:path).and_return('root/namespace/path.rb')
+    end
+    
+    it "returns a relative path" do
+      expect(file.relative_path).to eq('namespace/path.rb')
+    end
+  end
 end
