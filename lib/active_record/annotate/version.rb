@@ -1,5 +1,5 @@
 module ActiveRecord
   module Annotate
-    VERSION = '0.2.beta'
+    VERSION = '0.2'
   end
 end

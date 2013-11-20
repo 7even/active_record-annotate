@@ -10,7 +10,7 @@ Trivial.
 # Gemfile
 group :development do
   # you don't want to annotate your models in production, do you?
-  gem 'active_record-annotate'
+  gem 'active_record-annotate', '~> 0.2'
 end
 ```
 
@@ -22,11 +22,13 @@ $ bundle
 
 Gem adds a simple `db:annotate` rake task - it just writes the annotation to the top of each model file in a comment block (magic encoding comment is preserved).
 
+Once you install the gem into your application it hooks `db:annotate` to run after each `db:migrate` / `db:rollback` to keep the annotations in sync with the DB schema, but if you added a new model without migrating (or just accidentally messed up with something) you can always run the annotation process by hand:
+
 ``` sh
 $ rake db:annotate
 ```
 
-This is what it looks like:
+This is what a common annotation looks like:
 
 ``` ruby
 # create_table :documents, force: true do |t|
@@ -43,12 +45,17 @@ class Document < ActiveRecord::Base
 # ...
 ```
 
+## Changelog
+
+* 0.1 Initial version with core functionality
+* 0.1.1 Support for several models per table
+* 0.2 Auto-annotation after `db:migrate` & `db:rollback`, basic output
+
 ## Roadmap
 
 * Cover everything with tests
 * Write YARD docs
 * Add some means to configure the annotation process (annotation format, a place to put it)
-* Try to add auto-annotation after `db:migrate`
 
 ## Contributing
 
