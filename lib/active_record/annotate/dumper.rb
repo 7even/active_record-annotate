@@ -15,7 +15,7 @@ module ActiveRecord
         end
         
         def process_annotation(string_io)
-          string_io.string.split("\n").map do |line|
+          string_io.string.split(?\n).map do |line|
             line.tap do |line|
               # commenting out the line
               line[0] = '#'

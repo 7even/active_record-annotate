@@ -1,3 +1,4 @@
+require 'active_record/annotate/configurator'
 require 'active_record/annotate/dumper'
 require 'active_record/annotate/file'
 require 'active_record/annotate/version'
@@ -59,9 +60,17 @@ module ActiveRecord
         short_path.camelize.constantize
       end
       
+      def configure(&block)
+        configurator.instance_eval(&block)
+      end
+      
     private
       def models_dir
         Rails.root.join('app/models')
+      end
+      
+      def configurator
+        @configurator ||= Configurator.new
       end
     end
   end
