@@ -61,7 +61,7 @@ module ActiveRecord
       end
       
       def configure(&block)
-        configurator.instance_eval(&block)
+        configurator.tap(&block)
       end
       
     private
