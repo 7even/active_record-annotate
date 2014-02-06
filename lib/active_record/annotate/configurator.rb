@@ -1,7 +1,10 @@
 module ActiveRecord
   module Annotate
     class Configurator
-      attr_accessor :yard
+      %w(yard).each do |setting|
+        attr_accessor setting
+        alias_method "#{setting}?", setting
+      end
       
       def initialize
         reset

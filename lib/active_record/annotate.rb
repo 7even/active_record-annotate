@@ -15,7 +15,7 @@ module ActiveRecord
           
           file_paths_and_classes.each do |path, klass|
             file = File.new(path)
-            file.annotate_with(annotation)
+            file.annotate_with(annotation, configurator)
             
             if file.changed?
               file.write

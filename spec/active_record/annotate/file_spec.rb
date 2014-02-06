@@ -52,21 +52,53 @@ end
     FILE
   end
   
+  let(:expected_result_for_yard) do
+    <<-FILE
+# encoding: utf-8
+# ```
+# create_table :users do |t|
+#   t.string :name
+#   t.integer :age, null: false, default: 0
+# end
+# ```
+
+class User < ActiveRecord::Base
+  has_many :posts
+end
+    FILE
+  end
+  
   let(:file) { ActiveRecord::Annotate::File.new(file_path) }
+  let(:configurator) { ActiveRecord::Annotate::Configurator.new }
   
   describe "#annotate_with" do
     it "changes the lines adding the new annotation" do
-      file.annotate_with(new_annotation)
+      file.annotate_with(new_annotation, configurator)
       
       processed_file_content = file.lines.join(?\n)
       expect(processed_file_content).to eq(expected_result)
+    end
+    
+    context "when yard setting is on" do
+      let(:configurator) do
+        ActiveRecord::Annotate::Configurator.new.tap do |configurator|
+          configurator.yard = true
+        end
+      end
+      
+      it "adds triple backticks around the annotation" do
+        file.annotate_with(new_annotation, configurator)
+        
+        processed_file_content = file.lines.join(?\n)
+        expect(processed_file_content).to eq(expected_result_for_yard)
+      end
     end
   end
   
   describe "#changed?" do
     context "with an old annotation" do
       before(:each) do
-        file.annotate_with(old_annotation)
+        file.annotate_with(old_annotation, configurator)
       end
       
       it "returns false" do
@@ -76,7 +108,7 @@ end
     
     context "with a new annotation" do
       before(:each) do
-        file.annotate_with(new_annotation)
+        file.annotate_with(new_annotation, configurator)
       end
       
       it "returns true" do
@@ -87,7 +119,7 @@ end
   
   describe "#write" do
     before(:each) do
-      file.annotate_with(new_annotation)
+      file.annotate_with(new_annotation, configurator)
     end
     
     it "writes the new contents to file" do
