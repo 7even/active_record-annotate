@@ -6,15 +6,15 @@ ActiveRecord::Annotate is a simple ActiveRecord plugin for annotating your rails
 
 Trivial.
 
-``` ruby
+```ruby
 # Gemfile
 group :development do
   # you don't want to annotate your models in production, do you?
-  gem 'active_record-annotate', '~> 0.2'
+  gem 'active_record-annotate', '~> 0.3'
 end
 ```
 
-``` sh
+```sh
 $ bundle
 ```
 
@@ -24,13 +24,13 @@ Gem adds a simple `db:annotate` rake task - it just writes the annotation to the
 
 Once you install the gem into your application it hooks `db:annotate` to run after each `db:migrate` / `db:rollback` to keep the annotations in sync with the DB schema, but if you added a new model without migrating (or just accidentally messed up with something) you can always run the annotation process by hand:
 
-``` sh
+```sh
 $ rake db:annotate
 ```
 
 This is what a common annotation looks like:
 
-``` ruby
+```ruby
 # create_table :documents, force: true do |t|
 #   t.string   :title
 #   t.text     :content
@@ -45,17 +45,29 @@ class Document < ActiveRecord::Base
 # ...
 ```
 
+### Configuration
+
+The annotation process can be configured via the `ActiveRecord::Annotate.configure` block which is handy to keep in the initializer.
+
+You can generate the basic initializer with a built-in generator:
+
+```sh
+$ rails generate active_record:annotate:install
+```
+
+It creates an initializer at `config/initializers/annotate.rb` which contains descriptive comments about all settings (currently just one setting, `yard`).
+
 ## Changelog
 
 * 0.1 Initial version with core functionality
 * 0.1.1 Support for several models per table
 * 0.2 Auto-annotation after `db:migrate` & `db:rollback`, basic output
+* 0.3 Configuration and YARD code blocks support
 
 ## Roadmap
 
 * Cover everything with tests
 * Write YARD docs
-* Add some means to configure the annotation process (annotation format, a place to put it)
 
 ## Contributing
 

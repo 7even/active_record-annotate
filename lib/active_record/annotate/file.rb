@@ -9,7 +9,7 @@ module ActiveRecord
         @lines   = @content.split(?\n)
       end
       
-      def annotate_with(annotation)
+      def annotate_with(annotation, configurator)
         if @lines.first =~ /^\s*#.*coding/
           # encoding: utf-8 encountered on the first line
           encoding_line = @lines.shift
@@ -19,6 +19,11 @@ module ActiveRecord
           # throw out comments and empty lines
           # in the beginning of the file (old annotation)
           @lines.shift
+        end
+        
+        if configurator.yard?
+          backticks = '# ```'
+          annotation.unshift(backticks).push(backticks)
         end
         
         @lines.unshift(*annotation, nil)
