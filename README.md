@@ -10,7 +10,7 @@ Trivial.
 # Gemfile
 group :development do
   # you don't want to annotate your models in production, do you?
-  gem 'active_record-annotate', '~> 0.3'
+  gem 'active_record-annotate', '~> 0.4'
 end
 ```
 
@@ -63,6 +63,7 @@ It creates an initializer at `config/initializers/annotate.rb` which contains de
 * 0.1.1 Support for several models per table
 * 0.2 Auto-annotation after `db:migrate` & `db:rollback`, basic output
 * 0.3 Configuration and YARD code blocks support
+* 0.4 Checking table existance before dumping
 
 ## Roadmap
 
