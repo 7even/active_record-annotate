@@ -64,6 +64,7 @@ It creates an initializer at `config/initializers/annotate.rb` which contains de
 * 0.2 Auto-annotation after `db:migrate` & `db:rollback`, basic output
 * 0.3 Configuration and YARD code blocks support
 * 0.4 Checking table existance before dumping
+* 0.4.1 Several models per table fix
 
 ## Roadmap
 
