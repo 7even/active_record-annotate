@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ActiveRecord::Annotate do
   describe ".short_path_for" do
     before(:each) do
-      subject.stub(:models_dir).and_return('dir')
+      allow(subject).to receive(:models_dir).and_return('dir')
     end
     
     it "removes the root/app/models prefix and .rb suffix" do

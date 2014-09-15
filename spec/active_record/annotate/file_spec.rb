@@ -132,8 +132,8 @@ end
   
   describe "#relative_path" do
     before(:each) do
-      Rails.stub(:root).and_return('root')
-      file.stub(:path).and_return('root/namespace/path.rb')
+      allow(Rails).to receive(:root).and_return('root')
+      allow(file).to receive(:path).and_return('root/namespace/path.rb')
     end
     
     it "returns a relative path" do
