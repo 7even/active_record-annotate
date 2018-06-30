@@ -10,9 +10,14 @@ module ActiveRecord
       end
       
       def annotate_with(annotation, configurator)
-        if @lines.first =~ /^\s*#.*coding/i
-          # encoding: utf-8 encountered on the first line
-          encoding_line = @lines.shift
+        magic_comments = []
+        while @lines.first =~ /^\s*#.*(coding|frozen_string_literal|warn_indent)/i
+          magic_comments.push(@lines.shift)
+        end
+
+        unless magic_comments.empty?
+          # separate magic comments from the annotation with an empty line
+          magic_comments << nil
         end
         
         while @lines.first.start_with?('#') || @lines.first.blank?
@@ -27,7 +32,7 @@ module ActiveRecord
         end
         
         @lines.unshift(*annotation, nil)
-        @lines.unshift(encoding_line) unless encoding_line.nil?
+        @lines.unshift(*magic_comments)
         @lines.push(nil) # newline at the end of file
       end
       

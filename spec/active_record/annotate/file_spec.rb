@@ -6,6 +6,9 @@ describe ActiveRecord::Annotate::File do
     File.open(file.path, 'w') do |tempfile|
       tempfile.write(<<-FILE)
 # enCoding: utf-8
+# frozen_string_literal: true
+# warn_indent: true
+
 # create_table :users do |t|
 #   t.string :name
 #   t.integer :age
@@ -41,6 +44,9 @@ end
   let(:expected_result) do
     <<-FILE
 # enCoding: utf-8
+# frozen_string_literal: true
+# warn_indent: true
+
 # create_table :users do |t|
 #   t.string :name
 #   t.integer :age, null: false, default: 0
@@ -55,6 +61,9 @@ end
   let(:expected_result_for_yard) do
     <<-FILE
 # enCoding: utf-8
+# frozen_string_literal: true
+# warn_indent: true
+
 # ```
 # create_table :users do |t|
 #   t.string :name
