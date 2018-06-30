@@ -1,7 +1,9 @@
-guard :rspec, all_on_start: true, all_after_pass: true do
-  watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^lib/(.+)\.rb$})     { |m| "spec/#{m[1]}_spec.rb" }
-  watch('spec/spec_helper.rb')  { 'spec' }
-  
-  notification :terminal_notifier, activate: 'com.googlecode.iTerm2'
+guard :rspec, all_on_start: true, cmd: 'bundle exec rspec' do
+  require 'guard/rspec/dsl'
+  dsl = Guard::RSpec::Dsl.new(self)
+
+  watch(dsl.rspec.spec_helper) { dsl.rspec.spec_dir }
+  watch(dsl.rspec.spec_files)
+
+  dsl.watch_spec_files_for(dsl.ruby.lib_files)
 end
