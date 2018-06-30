@@ -10,7 +10,7 @@ module ActiveRecord
       end
       
       def annotate_with(annotation, configurator)
-        if @lines.first =~ /^\s*#.*coding/
+        if @lines.first =~ /^\s*#.*coding/i
           # encoding: utf-8 encountered on the first line
           encoding_line = @lines.shift
         end

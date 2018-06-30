@@ -5,7 +5,7 @@ describe ActiveRecord::Annotate::File do
     file = Tempfile.new('test_annotation')
     File.open(file.path, 'w') do |tempfile|
       tempfile.write(<<-FILE)
-# encoding: utf-8
+# enCoding: utf-8
 # create_table :users do |t|
 #   t.string :name
 #   t.integer :age
@@ -40,7 +40,7 @@ end
   
   let(:expected_result) do
     <<-FILE
-# encoding: utf-8
+# enCoding: utf-8
 # create_table :users do |t|
 #   t.string :name
 #   t.integer :age, null: false, default: 0
@@ -54,7 +54,7 @@ end
   
   let(:expected_result_for_yard) do
     <<-FILE
-# encoding: utf-8
+# enCoding: utf-8
 # ```
 # create_table :users do |t|
 #   t.string :name
