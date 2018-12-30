@@ -67,6 +67,7 @@ It creates an initializer at `config/initializers/annotate.rb` which contains de
 * 0.4.1 Several models per table fix
 * 0.4.2 Initializer fix
 * 0.4.3 Support for `frozen_string_literal` & `warn_indent` magic comments
+* 0.4.4 Rails 5.2 support
 
 ## Roadmap
 
