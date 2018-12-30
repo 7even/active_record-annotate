@@ -2,11 +2,11 @@ module ActiveRecord
   module Annotate
     module Dumper
       class << self
-        def dump(table_name, connection = ActiveRecord::Base.connection)
+        def dump(table_name, connection = ActiveRecord::Base.connection, config = ActiveRecord::Base)
           string_io = StringIO.new
           
           if connection.table_exists?(table_name)
-            dumper(connection).send(:table, table_name, string_io)
+            dumper(connection, config).send(:table, table_name, string_io)
           else
             string_io.write("  # can't find table `#{table_name}`")
           end
@@ -15,8 +15,12 @@ module ActiveRecord
         end
         
       private
-        def dumper(connection)
-          ActiveRecord::SchemaDumper.send(:new, connection)
+        def dumper(connection, config)
+          if connection.respond_to?(:create_schema_dumper)
+            connection.create_schema_dumper(ActiveRecord::SchemaDumper.send(:generate_options, config))
+          else
+            ActiveRecord::SchemaDumper.send(:new, connection)
+          end
         end
         
         def process_annotation(string_io)
