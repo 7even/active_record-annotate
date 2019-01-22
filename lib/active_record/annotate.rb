@@ -45,6 +45,7 @@ module ActiveRecord
           
           klass = class_name_for(short_path)
           next unless klass < ActiveRecord::Base # collect only AR::Base descendants
+          next if klass.name == "ApplicationRecord" # skip ApplicationRecord
           
           models[klass.table_name] << [path, klass]
         end
