@@ -4,8 +4,8 @@ module ActiveRecord
       class << self
         def dump(table_name, connection = ActiveRecord::Base.connection, config = ActiveRecord::Base)
           string_io = StringIO.new
-          
-          if connection.table_exists?(table_name)
+
+          if connection.table_exists?(table_name) || connection.view_exists?(table_name)
             dumper(connection, config).send(:table, table_name, string_io)
           else
             string_io.write("  # can't find table `#{table_name}`")
