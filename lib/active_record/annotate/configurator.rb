@@ -1,18 +1,22 @@
 module ActiveRecord
   module Annotate
     class Configurator
-      %w(yard).each do |setting|
+      BOOLEAN_ATTRIBUTES = %w(yard debug)
+
+      BOOLEAN_ATTRIBUTES.each do |setting|
         attr_accessor setting
         alias_method "#{setting}?", setting
       end
-      
+
       def initialize
         reset
       end
-      
+
     private
       def reset
-        @yard = false
+        BOOLEAN_ATTRIBUTES.each do |attr|
+          instance_variable_set("@#{attr}", false)
+        end
       end
     end
   end
