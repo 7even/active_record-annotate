@@ -47,7 +47,7 @@ class Document < ActiveRecord::Base
 
 ### Configuration
 
-The annotation process can be configured via the `ActiveRecord::Annotate.configure` block which is handy to keep in the initializer.
+The annotation process can be configured via the `ActiveRecord::Annotate.configure` block which is handy to keep in an initializer.
 
 You can generate the basic initializer with a built-in generator:
 
@@ -55,7 +55,22 @@ You can generate the basic initializer with a built-in generator:
 $ rails generate active_record:annotate:install
 ```
 
-It creates an initializer at `config/initializers/annotate.rb` which contains descriptive comments about all settings (currently just one setting, `yard`).
+It creates an initializer at `config/initializers/annotate.rb` which contains descriptive comments about each setting.
+
+```ruby
+require 'active_record/annotate'
+
+if defined?(ActiveRecord::Annotate)
+  ActiveRecord::Annotate.configure do |config|
+    # # set this to true to wrap annotations in triple backticks (```)
+    # # so YARD documentation can process the annotation as a code block
+    # config.yard = false
+    #
+    # # Define any models to be skipped by Annotate
+    # config.ignored_models = [SomeIgnoredModel, AnotherIgnoredModel]
+  end
+end
+```
 
 ## Changelog
 
