@@ -7,7 +7,7 @@ module ActiveRecord
       end
 
       attr_accessor :ignored_models
-      def annotate_ignore=(models)
+      def ignored_models=(models)
         if models.is_a?(Array)
           @ignored_models = models
         else
@@ -23,7 +23,7 @@ module ActiveRecord
 
       def reset
         @yard = false
-        @annotate_ignore = []
+        @ignored_models = []
       end
 
     end
