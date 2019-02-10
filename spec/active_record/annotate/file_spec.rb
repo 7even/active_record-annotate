@@ -58,6 +58,18 @@ end
     FILE
   end
   
+  let(:expected_ignored_result) do
+    <<-FILE
+# enCoding: utf-8
+# frozen_string_literal: true
+# warn_indent: true
+
+class User < ActiveRecord::Base
+  has_many :posts
+end
+    FILE
+  end
+  
   let(:expected_result_for_yard) do
     <<-FILE
 # enCoding: utf-8
