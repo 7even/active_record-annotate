@@ -78,7 +78,11 @@ end
   end
   
   let(:file) { ActiveRecord::Annotate::File.new(file_path) }
-  let(:configurator) { ActiveRecord::Annotate::Configurator.new }
+  let(:configurator) {
+    c = ActiveRecord::Annotate::Configurator.new
+    c.debug = true
+    c
+  }
   
   describe "#annotate_with" do
     it "changes the lines adding the new annotation" do
@@ -149,4 +153,19 @@ end
       expect(file.relative_path).to eq('namespace/path.rb')
     end
   end
+
+  describe "Annotation Errors" do
+    it "Removes Old Annotation" do
+      file.annotate_with(["error"], configurator)
+      expect(file).to be_changed
+
+      file.write
+      new_file = ActiveRecord::Annotate::File.new(file.path)
+
+      ### Doesnt add new annotation to non-annotated file
+      new_file.annotate_with(["error"], configurator)
+      expect(new_file).not_to be_changed
+    end
+  end
+
 end
