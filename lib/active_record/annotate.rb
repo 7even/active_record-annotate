@@ -9,21 +9,21 @@ module ActiveRecord
     class << self
       def annotate
         processed_models = []
-        
+
         models.each do |table_name, file_paths_and_classes|
           annotation = Dumper.dump(table_name)
-          
+
           file_paths_and_classes.each do |path, klass|
             file = File.new(path)
             file.annotate_with(annotation.dup, configurator)
-            
+
             if file.changed?
               file.write
               processed_models << "#{klass} (#{file.relative_path})"
             end
           end
         end
-        
+
         unless processed_models.empty?
           puts 'Annotated models:'
           processed_models.each do |model|
@@ -31,45 +31,52 @@ module ActiveRecord
           end
         end
       end
-      
+
       def models
-        files_mask = models_dir.join('**', '*.rb')
-        
+        files_mask = models_dirs.map do |path|
+          ::File.join(path, '**', '*.rb')
+        end
+
         hash_with_arrays = Hash.new do |hash, key|
           hash[key] = []
         end
-        
+
         Dir.glob(files_mask).each_with_object(hash_with_arrays) do |path, models|
           short_path = short_path_for(path)
           next if short_path.starts_with?('concerns') # skip any app/models/concerns files
-          
+
           klass = class_name_for(short_path)
           next unless klass < ActiveRecord::Base # collect only AR::Base descendants
           next if klass.respond_to?(:abstract_class?) && klass.abstract_class?
-          
+
           models[klass.table_name] << [path, klass]
         end
       end
-      
+
       # .../app/models/car/hatchback.rb -> car/hatchback
       def short_path_for(full_path)
+        models_dir = models_dirs.find { |path| full_path.include?(path) }
+
         full_path.sub(models_dir.to_s + '/', '').sub(/\.rb$/, '')
       end
-      
+
       # car/hatchback -> Car::Hatchback
       def class_name_for(short_path)
         short_path.camelize.constantize
       end
-      
+
       def configure(&block)
         configurator.tap(&block)
       end
-      
-    private
-      def models_dir
-        Rails.root.join('app/models')
+
+      private
+
+      def models_dirs
+        Rails.application.paths.all_paths.flat_map(&:to_a).select do |path|
+          path.include?('models')
+        end
       end
-      
+
       def configurator
         @configurator ||= Configurator.new
       end
