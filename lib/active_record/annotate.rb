@@ -73,7 +73,7 @@ module ActiveRecord
 
       def models_dirs
         Rails.application.paths.all_paths.flat_map(&:to_a).select do |path|
-          path.include?('models')
+          path.end_with?('models')
         end
       end
 
